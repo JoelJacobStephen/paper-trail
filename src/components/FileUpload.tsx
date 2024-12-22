@@ -27,7 +27,7 @@ const FileUpload = () => {
   });
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: { "application/pdf": ["pdf"] },
+    accept: { "application/pdf": [".pdf"] },
     onDrop: async (acceptedFiles) => {
       const file = acceptedFiles[0];
       if (file.size > 10 * 1024 * 1024) {
@@ -46,15 +46,14 @@ const FileUpload = () => {
           { file_key: data.fileKey, file_name: data.fileName },
           {
             onSuccess: (data) => {
-              toast.success(data.message);
+              //   toast.success(data.message);
+              console.log(data);
             },
             onError: (error) => {
               console.log(error);
             },
           }
         );
-
-        console.log(data);
       } catch (error) {
         console.log(error);
       } finally {
