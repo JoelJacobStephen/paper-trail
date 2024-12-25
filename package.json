@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.0.11",
     "@clerk/nextjs": "^6.9.5",
     "@langchain/community": "^0.3.19",
     "@langchain/core": "^0.3.26",
@@ -18,6 +19,7 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@tanstack/react-query": "^5.62.8",
     "@types/md5": "^2.3.5",
+    "ai": "^4.0.22",
     "aws-sdk": "^2.1692.0",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
@@ -35,7 +37,8 @@
     "react-dropzone": "^14.3.5",
     "react-hot-toast": "^2.4.1",
     "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
