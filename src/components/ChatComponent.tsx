@@ -11,7 +11,7 @@ import axios from "axios";
 type Props = { chatId: number };
 
 const ChatComponent = ({ chatId }: Props) => {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["chat", chatId],
     queryFn: async () => {
       const response = await axios.post<Message[]>("/api/get-messages", {
@@ -49,7 +49,7 @@ const ChatComponent = ({ chatId }: Props) => {
       </div>
 
       {/* Chat messages list */}
-      <MessageList messages={messages} />
+      <MessageList messages={messages} isLoading={isLoading} />
 
       <form
         onSubmit={handleSubmit}

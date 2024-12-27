@@ -2,34 +2,41 @@ import { Pinecone } from "@pinecone-database/pinecone";
 import { convertToAscii } from "./utils";
 import { getEmbeddings } from "./embeddings";
 
-export async function getMatchersFromEmbeddings(
+export async function getMatchesFromEmbeddings(
   embeddings: number[],
   fileKey: string
 ) {
-  const pinecone = new Pinecone({
-    apiKey: process.env.PINECONE_API_KEY ?? "",
-  });
-
-  const index = pinecone.index("paper-trail");
-
   try {
-    const namespace = convertToAscii(fileKey);
-    const queryResult = await index.namespace(namespace).query({
-      topK: 5,
+    const pinecone = new Pinecone({
+      apiKey: process.env.PINECONE_API_KEY!,
+    });
+    const pineconeIndex = pinecone.index("paper-trail");
+    const namespace = pineconeIndex.namespace(convertToAscii(fileKey));
+
+    console.log("Embeddings length:", embeddings.length);
+    console.log("File key:", fileKey);
+    console.log("Namespace:", convertToAscii(fileKey));
+
+    const queryResult = await namespace.query({
+      topK: 10,
       vector: embeddings,
       includeMetadata: true,
     });
 
+    console.log("Query Result full:", JSON.stringify(queryResult, null, 2));
+
     return queryResult.matches || [];
   } catch (error) {
-    console.error("Error querying Embeddings", error);
+    console.log("error querying embeddings", error);
     throw error;
   }
 }
 
 export async function getContext(query: string, fileKey: string) {
   const queryEmbeddings = await getEmbeddings(query);
-  const matches = await getMatchersFromEmbeddings(queryEmbeddings, fileKey);
+  console.log("File Key: ", fileKey);
+
+  const matches = await getMatchesFromEmbeddings(queryEmbeddings, fileKey);
 
   const qualifyingDocs = matches.filter(
     (match) => match.score && match.score > 0.7
@@ -40,6 +47,9 @@ export async function getContext(query: string, fileKey: string) {
     pageNumber: number;
   };
 
-  let docs = qualifyingDocs.map((match) => (match.metadata as Metadata).text);
+  const docs = qualifyingDocs.map((match) => (match.metadata as Metadata).text);
+  console.log("Matches: ", matches);
+  console.log("Docs: ", docs);
+
   return docs.join("\n").substring(0, 3000);
 }

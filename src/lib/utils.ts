@@ -6,6 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function convertToAscii(str: string) {
-  const asciiString = str.replace(/[^\x00-\x7F]/g, "");
-  return asciiString;
+  return str.replace(/[^\x00-\x7F]/g, "").replace(/[^a-zA-Z0-9-_]/g, "_");
 }

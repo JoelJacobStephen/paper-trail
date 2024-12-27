@@ -16,7 +16,6 @@ export async function getEmbeddings(text: string) {
     });
 
     const result = await response.json();
-    console.log("openai result", result);
 
     if (result.error) {
       console.log("openai error", result.error);
@@ -24,7 +23,6 @@ export async function getEmbeddings(text: string) {
     }
 
     if (Array.isArray(result.data) && result.data.length > 0) {
-      console.log("openai result data", result.data);
       const embedding = result.data[0].embedding as number[];
       if (embedding.length !== 1536) {
         throw new Error(
