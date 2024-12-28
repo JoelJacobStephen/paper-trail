@@ -1,8 +1,6 @@
 import React from "react";
 
-type Props = {
-  pdf_url: string;
-};
+type Props = { pdf_url: string };
 
 const PDFViewer = ({ pdf_url }: Props) => {
   return (
