@@ -75,6 +75,7 @@ export const truncateStringByBytes = (str: string, bytes: number) => {
 };
 
 async function prepareDocument(page: PDFPage) {
+  // eslint-disable-next-line prefer-const
   let { pageContent, metadata } = page;
   pageContent = pageContent.replace(/\n/g, "");
   // split the docs
