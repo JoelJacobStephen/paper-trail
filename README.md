@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Paper Trail - AI-Powered Document Chat
+
+Paper Trail is an intelligent document analysis tool that allows users to upload PDF documents and engage in contextual conversations about their content using advanced Language Learning Models (LLMs). Perfect for legal documents, research papers, or any text-heavy PDFs that require in-depth understanding.
+
+## Features
+
+- 📄 PDF document upload and processing
+- 💬 Contextual chat interface with AI
+- 🔒 Secure user authentication
+- 💎 Pro subscription options
+- 📱 Responsive design
+- ☁️ Cloud storage integration
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TailwindCSS
+- **Backend**: Next.js API Routes
+- **Database**: PostgreSQL (via Drizzle ORM)
+- **Authentication**: Clerk
+- **File Storage**: AWS S3
+- **Vector Database**: Pinecone
+- **AI/LLM**: OpenAI
+- **Payment Processing**: Stripe
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Set up environment variables:
+
+```env
+DATABASE_URL=
+NEXT_PUBLIC_S3_ACCESS_KEY_ID=
+NEXT_PUBLIC_S3_SECRET_ACCESS_KEY=
+NEXT_PUBLIC_S3_BUCKET_NAME=
+NEXT_PUBLIC_S3_REGION=
+OPENAI_API_KEY=
+PINECONE_API_KEY=
+STRIPE_API_KEY=
+STRIPE_WEBHOOK_SIGNING_SECRET=
+```
+
+4. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How It Works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Document Upload**: Users can upload PDF documents through the drag-and-drop interface (reference: `src/components/FileUpload.tsx`).
 
-## Learn More
+2. **Processing**: The system:
 
-To learn more about Next.js, take a look at the following resources:
+   - Uploads the document to S3
+   - Processes the PDF content
+   - Creates embeddings using OpenAI
+   - Stores vectors in Pinecone for efficient retrieval
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Chat Interface**: Users can ask questions about their documents and receive contextual responses powered by AI (reference: `src/components/ChatComponent.tsx`).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+The project follows a standard Next.js 13+ structure with the app router:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── app/              # Next.js app router pages
+├── components/       # React components
+├── lib/             # Utility functions and configurations
+└── middleware.ts    # Authentication middleware
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Features in Detail
+
+### Authentication
+
+- Secure user authentication handled by Clerk
+- Protected routes and API endpoints
+- Reference: `src/middleware.ts`
+
+### Document Processing
+
+- S3 integration for document storage
+- PDF parsing and text extraction
+- Vector embeddings for semantic search
+- Reference: `src/lib/pinecone.ts`
+
+### Chat Interface
+
+- Real-time chat with AI
+- Context-aware responses
+- Message history
+- Reference: `src/components/ChatComponent.tsx`
+
+### Subscription Management
+
+- Pro tier features
+- Stripe integration for payments
+- Subscription status tracking
+- Reference: `src/components/SubscriptionButton.tsx`
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+For more information about the core technologies used:
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Clerk Authentication](https://clerk.dev/docs)
+- [Pinecone Vector Database](https://www.pinecone.io/docs/)
+- [OpenAI API](https://platform.openai.com/docs/)
+- [Stripe Payments](https://stripe.com/docs)
