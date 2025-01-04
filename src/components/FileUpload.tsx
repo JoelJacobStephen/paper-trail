@@ -1,5 +1,5 @@
 "use client";
-import { uploadToS3 } from "@/lib/s3";
+import { uploadToS3WithPresignedUrl } from "@/lib/s3";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { Inbox, Loader2 } from "lucide-react";
@@ -40,7 +40,7 @@ const FileUpload = () => {
 
       try {
         setUploading(true);
-        const data = await uploadToS3(file);
+        const data = await uploadToS3WithPresignedUrl(file);
         if (!data?.fileKey || !data?.fileName) {
           toast.error("Something went wrong");
           return;
@@ -60,6 +60,7 @@ const FileUpload = () => {
         );
       } catch (error) {
         console.log(error);
+        toast.error("Error uploading file");
       } finally {
         setUploading(false);
       }

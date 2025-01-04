@@ -1,48 +1,36 @@
-import AWS from "aws-sdk";
+import axios from "axios";
 
-export async function uploadToS3(file: File) {
+export async function uploadToS3WithPresignedUrl(file: File) {
   try {
-    AWS.config.update({
-      accessKeyId: process.env.NEXT_PUBLIC_S3_ACCESS_KEY_ID,
-      secretAccessKey: process.env.NEXT_PUBLIC_S3_SECRET_ACCESS_KEY,
+    // Get the presigned URL
+    const response = await axios.post("/api/get-upload-url", {
+      filename: file.name,
     });
 
-    const s3 = new AWS.S3({
-      params: {
-        Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
+    const { presignedUrl, file_key } = response.data;
+
+    // Upload the file using the presigned URL
+    await axios.put(presignedUrl, file, {
+      headers: {
+        "Content-Type": "application/pdf",
       },
-      region: process.env.NEXT_PUBLIC_S3_REGION,
-    });
-
-    const file_key =
-      "uploads/" + Date.now().toString() + file.name.replace(" ", "_");
-
-    const params = {
-      Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME!,
-      Key: file_key,
-      Body: file,
-    };
-
-    const upload = s3
-      .putObject(params)
-      .on("httpUploadProgress", (progress) => {
-        console.log(
-          "uploading...",
-          (progress.loaded / progress.total) * 100 + "%"
+      onUploadProgress: (progressEvent) => {
+        const percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total!
         );
-      })
-      .promise();
-
-    await upload.then(() => {
-      console.log("file uploaded to S3", file_key);
+        console.log("uploading...", percentCompleted + "%");
+      },
     });
 
-    return Promise.resolve({
+    console.log("file uploaded to S3", file_key);
+
+    return {
       fileKey: file_key,
       fileName: file.name,
-    });
+    };
   } catch (error) {
-    console.error(error);
+    console.error("Error uploading file:", error);
+    throw error;
   }
 }
 
